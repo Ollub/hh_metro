@@ -1,4 +1,4 @@
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientTimeout
 
 
 class HH:
@@ -11,9 +11,10 @@ class HH:
         return stations
 
     @classmethod
-    async def __get_json_response(cls, url):
+    async def __get_json_response(cls, url, timeout=60):
+        timeout = ClientTimeout(timeout)
         async with ClientSession(raise_for_status=True) as session:
-            async with session.get(url) as resp:
+            async with session.get(url, timeout=timeout) as resp:
                 response = await resp.json()
                 return response
 
@@ -23,5 +24,4 @@ class HH:
         stations = []
         for line in metro_info['lines']:
             stations.extend([station['name'] for station in line['stations']])
-        print(stations)
         return stations
