@@ -1,5 +1,8 @@
 from aiohttp import web
+from metro.logger import get_logger
 
+
+logger = get_logger()
 
 async def handle_400(request, msg=None):
     return web.json_response({'error': 'Bad request', 'message': msg}, status=400)
@@ -24,16 +27,19 @@ def create_error_middleware(status_handlers):
             return response
 
         except web.HTTPException as e:
+            logger.error('web.HTTPException {}'.format(repr(e)), exc_info=True)
             override = status_handlers.get(e.status)
             if override:
                 return await override(request, e.text)
             raise
         except AssertionError as e:
+            logger.error('AssertionError {}'.format(repr(e)), exc_info=True)
             override = status_handlers.get(400)
             if override:
                 return await override(request, e.args[0] if e.args else None)
             raise
         except Exception as e:
+            logger.error('Exception {}'.format(repr(e)), exc_info=True)
             override = status_handlers.get(500)
             if override:
                 return await override(request)

@@ -2,12 +2,15 @@ import json
 from json import JSONDecodeError
 
 from aiohttp import web
-from client import HH
-from helpers import compare_stations
+from metro.client import HH
+from metro.helpers import compare_stations
+from metro.logger import get_logger
 
+logger = get_logger(__name__)
 
 async def verify_stations(request):
     stations = request.query['stations']
+    logger.info('Requested stations: {}'.format(stations))
     assert stations, 'Value of query parameter can not be empty'
     try:
         stations = json.loads(stations)

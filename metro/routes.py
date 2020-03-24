@@ -1,4 +1,4 @@
-from views import verify_stations
+from metro.views import verify_stations
 
 
 def setup_routes(app):
