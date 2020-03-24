@@ -3,8 +3,13 @@ from metro.routes import setup_routes
 from metro.middlewares import setup_middlewares
 from metro.settings import Config
 
-app = web.Application()
-setup_routes(app)
-setup_middlewares(app)
-app['config'] = Config
-web.run_app(app)
+async def init_app():
+    app = web.Application()
+    app['config'] = Config
+    setup_routes(app)
+    setup_middlewares(app)
+    return app
+
+if __name__ == '__main__':
+    app = init_app()
+    web.run_app(app)
