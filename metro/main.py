@@ -1,3 +1,4 @@
+import os
 from aiohttp import web
 from metro.routes import setup_routes
 from metro.middlewares import setup_middlewares
@@ -12,4 +13,4 @@ async def init_app():
 
 if __name__ == '__main__':
     app = init_app()
-    web.run_app(app)
+    web.run_app(init_app(), host='127.0.0.1', port=int(os.environ.get('SERVICE_PORT', 8080)))
