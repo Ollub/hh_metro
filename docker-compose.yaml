@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  metro_app:
+    image: 03db/metro
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      - TZ=Europe/Moscow
